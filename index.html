@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TurboTax — Recommended Filing Options (Demo)</title>
+<style>
+  :root {
+    --page-bg: #ffffff;
+    --nav-bg: #f4f4ef;
+    --border-primary: #c3ced5;
+    --border-secondary: #d3d3d0;
+    --text-primary: #21262a;
+    --text-base: #1d1d1d;
+    --link: #205ea3;
+    --blue-100: #deedfe;
+    --blue-900: #0566ff;
+    --divider: #d5dee3;
+    --radius-card: 20px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--text-primary);
+    background: var(--page-bg);
+  }
+
+  .app {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 200px;
+    flex-shrink: 0;
+    background: var(--nav-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+  }
+
+  .brand {
+    padding: 16px 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .brand svg { flex-shrink: 0; }
+
+  .brand-name {
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: -0.2px;
+    color: #1d1d1d;
+  }
+  .brand-name .live {
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    color: #d5231f;
+    letter-spacing: 1px;
+    margin-top: -2px;
+  }
+
+  .sidebar-bottom {
+    padding-bottom: 8px;
+  }
+
+  .sidebar-item {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+  .sidebar-item:hover { background: rgba(0,0,0,0.04); }
+
+  /* Header */
+  .header {
+    border-bottom: 1px solid var(--border-primary);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px 0 20px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+  }
+  .icon-btn:hover { background: rgba(226,233,237,0.6); }
+
+  /* Main content */
+  .main {
+    flex: 1;
+    padding: 40px 40px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .headline-block {
+    width: 1000px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .headline {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 28px;
+    margin: 0;
+  }
+
+  .coverage-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .coverage-label {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    background: rgba(220,220,218,0.35);
+    border: 1px solid #ccc;
+    font-size: 14px;
+    color: #3a3a3a;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .why-link {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .cards-wrap {
+    width: 1000px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  /* Primary DIY card */
+  .diy-card {
+    width: 100%;
+    background: var(--blue-100);
+    border-radius: var(--radius-card);
+    box-shadow: 0 4px 4px rgba(0,0,0,0.2);
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .diy-image {
+    width: 396px;
+    max-width: 40%;
+    flex-shrink: 0;
+    border-radius: 17.6px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #4a5a6a 0%, #2b3540 60%, #1c232b 100%);
+  }
+  .diy-image::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15), transparent 40%),
+      linear-gradient(-55deg, rgba(0,0,0,0.55) 5%, rgba(0,0,0,0) 45%);
+  }
+  .diy-image-figure {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.35);
+  }
+  .diy-image-figure svg { width: 55%; height: 55%; }
+
+  .stat-overlay {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    width: 155px;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(2px);
+    border-radius: 9px;
+    padding: 14px 12px;
+    text-align: center;
+    color: #fff;
+  }
+  .stat-overlay .stat-tag {
+    color: #c4fac8;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .stat-overlay .stat-amount {
+    font-size: 32px;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: -0.5px;
+  }
+  .stat-overlay .stat-caption {
+    font-size: 14px;
+    margin: 6px 0 0;
+  }
+
+  .diy-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    min-width: 0;
+  }
+
+  .product-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .product-logo.diy { color: #1d1d1d; }
+  .product-logo .checkball { flex-shrink: 0; }
+
+  .card-title {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 36px;
+    margin: 16px 0 0;
+  }
+  .secondary-card .card-title { font-size: 28px; line-height: 36px; }
+
+  .bullets {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .secondary-card .bullets { gap: 10px; }
+
+  .bullets li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text-base);
+  }
+  .bullets li svg { flex-shrink: 0; }
+  .bullets u { text-decoration: underline; font-weight: 600; }
+
+  .price-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .price {
+    font-size: 40px;
+    font-weight: 500;
+    margin: 0;
+  }
+  .price-note {
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+    margin: 0;
+  }
+
+  .diy-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 24.83%;
+    min-width: 220px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 20px;
+    border-radius: 9999px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--blue-900);
+    color: #fff;
+    margin-top: 20px;
+  }
+  .btn-primary:hover { background: #0450cc; }
+  .btn-outline {
+    background: #fff;
+    color: var(--text-base);
+    border: 1px solid #808080;
+  }
+  .btn-outline:hover { background: #f5f5f5; }
+
+  .other-ways-title {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    width: 100%;
+  }
+
+  .secondary-cards {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .secondary-card {
+    flex: 1;
+    background: #fff;
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--radius-card);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .secondary-card .price-block { margin-top: 40px; }
+  .secondary-card .btn-outline { margin-top: 40px; }
+
+  .see-other-link {
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-align: center;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .back-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    padding: 8px 0;
+  }
+
+  /* Footer */
+  .footer {
+    width: 1000px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 40px;
+    gap: 8px;
+  }
+  .footer-links {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .footer-links a {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 0 12px;
+  }
+  .footer-links a:hover { text-decoration: underline; }
+  .footer-links .divider {
+    width: 1px;
+    height: 16px;
+    background: var(--divider);
+  }
+  .footer-legal {
+    font-size: 12px;
+    color: var(--text-primary);
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: #21262a;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: transform 0.25s ease;
+    z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .diy-card { flex-direction: column; }
+    .diy-image { width: 100%; max-width: 100%; height: 260px; }
+    .diy-bottom { width: 100%; }
+    .secondary-cards { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="12" fill="#D5231F"/>
+          <path d="M7 12.5L10.2 15.7L17 8.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="brand-name">turbotax<span class="live">LIVE</span></span>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="sidebar-item">Intuit account</div>
+        <div class="sidebar-item">Cambiar a español</div>
+        <div class="sidebar-item">Sign out</div>
+      </div>
+    </aside>
+
+    <!-- Main column -->
+    <div style="flex:1; display:flex; flex-direction:column;">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-left">
+          <a href="#" class="explain-link" style="font-size:14px; font-weight:600; color:var(--link); text-decoration:none;">Explain my taxes</a>
+        </div>
+        <div class="header-right">
+          <button class="icon-btn" aria-label="Search" onclick="showToast('Search — demo only')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <button class="icon-btn" aria-label="Help" onclick="showToast('Help — demo only')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1.3 1-1.3 1.9v.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <main class="main">
+        <div class="headline-block">
+          <h1 class="headline">[Name], based on your new situation, we recommend</h1>
+          <div class="coverage-row">
+            <span class="coverage-label">What's covered:</span>
+            <span class="badge">W-2</span>
+            <span class="badge">Got married</span>
+            <span class="badge">Bought a home</span>
+            <span class="badge">Dependents</span>
+          </div>
+          <a href="#" class="why-link">Why are we recommending this?</a>
+        </div>
+
+        <div class="cards-wrap">
+          <!-- Primary DIY card -->
+          <div class="diy-card">
+            <div class="diy-image">
+              <div class="diy-image-figure">
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M4 20c0-3.5 3.5-6 8-6s8 2.5 8 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div class="stat-overlay">
+                <p class="stat-tag">Fast cash back</p>
+                <p class="stat-amount">$3,248</p>
+                <p class="stat-caption">Great refund!</p>
+              </div>
+            </div>
+            <div class="diy-body">
+              <div>
+                <div class="product-logo diy">
+                  <svg class="checkball" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#D5231F"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Do It Yourself
+                </div>
+                <h2 class="card-title">File yourself with clear, step-by-step tools.</h2>
+                <ul class="bullets">
+                  <li>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#0566ff" opacity="0.12"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="#0566ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Get that 'no missed deductions' feeling
+                  </li>
+                  <li>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#0566ff" opacity="0.12"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="#0566ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Docs and data imported for you
+                  </li>
+                  <li>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#0566ff" opacity="0.12"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="#0566ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    100% accurate calculations, <u>guaranteed</u>
+                  </li>
+                </ul>
+              </div>
+              <div class="diy-bottom">
+                <div class="price-block">
+                  <p class="price">$39</p>
+                  <p class="price-note">State additional</p>
+                </div>
+                <button class="btn btn-primary" onclick="showToast('Starting DIY flow — demo only')">Start for free</button>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="other-ways-title">Other ways to file:</h3>
+
+          <div class="secondary-cards">
+            <!-- Expert Assist -->
+            <div class="secondary-card">
+              <div class="product-logo">
+                <svg class="checkball" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#D5231F"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Expert Assist
+              </div>
+              <h2 class="card-title">Do your own taxes, then an expert reviews, signs and files.</h2>
+              <ul class="bullets">
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#0566ff" opacity="0.12"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="#0566ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Expert-signed, expert-backed
+                </li>
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#0566ff" opacity="0.12"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="#0566ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Unlimited expert tax help all year
+                </li>
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#0566ff" opacity="0.12"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="#0566ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Match with a dedicated expert
+                </li>
+              </ul>
+              <div class="price-block">
+                <p class="price">$89</p>
+                <p class="price-note">State additional</p>
+              </div>
+              <button class="btn btn-outline" onclick="showToast('Starting Expert Assist flow — demo only')">Start for free</button>
+            </div>
+
+            <!-- Expert Full Service -->
+            <div class="secondary-card">
+              <div class="product-logo">
+                <svg class="checkball" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#D5231F"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Expert Full Service
+              </div>
+              <h2 class="card-title">Let a local tax expert file for you, start to finish</h2>
+              <ul class="bullets">
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#0566ff" opacity="0.12"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="#0566ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Get matched with a personalized local tax expert
+                </li>
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#0566ff" opacity="0.12"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="#0566ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Meet with your expert online or in-person
+                </li>
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#0566ff" opacity="0.12"/><path d="M7 12.5L10.2 15.7L17 8.5" stroke="#0566ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Review it all with your expert before they file
+                </li>
+              </ul>
+              <div class="price-block">
+                <p class="price">$199</p>
+                <p class="price-note">Fed and state included</p>
+              </div>
+              <button class="btn btn-outline" onclick="showToast('Starting Full Service flow — demo only')">Start for free</button>
+            </div>
+          </div>
+
+          <a href="#" class="see-other-link">See other TurboTax products</a>
+
+          <button class="back-link" onclick="showToast('Back — demo only')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Back
+          </button>
+
+          <div class="footer">
+            <div class="footer-links">
+              <a href="#">License Agreement</a>
+              <span class="divider"></span>
+              <a href="#">Privacy</a>
+              <span class="divider"></span>
+              <a href="#">Security</a>
+              <span class="divider"></span>
+              <a href="#">Cobrowse</a>
+            </div>
+            <div class="footer-legal">© 2026 Intuit Inc. All rights reserved</div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+  </script>
+</body>
+</html>
